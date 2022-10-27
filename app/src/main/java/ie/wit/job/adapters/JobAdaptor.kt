@@ -6,7 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import ie.wit.job.databinding.CardJobBinding
 import ie.wit.job.models.JobModel
 
-class JobAdapter constructor(private var jobs: List<JobModel>) :
+interface JobListener {
+    fun onJobClick(job: JobModel)
+}
+
+class JobAdapter constructor(private var jobs: List<JobModel>,
+                             private val listener: JobListener) :
     RecyclerView.Adapter<JobAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -17,7 +22,7 @@ class JobAdapter constructor(private var jobs: List<JobModel>) :
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val job = jobs[holder.adapterPosition]
-        holder.bind(job)
+        holder.bind(job, listener)
     }
 
     override fun getItemCount(): Int = jobs.size
@@ -25,9 +30,10 @@ class JobAdapter constructor(private var jobs: List<JobModel>) :
     class MainHolder(private val binding : CardJobBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(job: JobModel) {
+        fun bind(job: JobModel, listener: JobListener) {
             binding.jobTitle.text = job.title
             binding.description.text = job.description
+            binding.root.setOnClickListener { listener.onJobClick(job) }
         }
     }
 }

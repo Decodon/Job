@@ -1,13 +1,16 @@
 package ie.wit.job.main
 
 import android.app.Application
-import ie.wit.job.models.JobModel
+import ie.wit.job.models.JobMemStore
+//import ie.wit.job.models.JobModel
 import timber.log.Timber
 import timber.log.Timber.i
 
 class MainApp : Application() {
 
-    val jobs = ArrayList<JobModel>()
+    //val jobs = ArrayList<JobModel>()
+    val jobs = JobMemStore()
+
 
     override fun onCreate() {
         super.onCreate()

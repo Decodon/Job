@@ -27,15 +27,18 @@ class JobActivity : AppCompatActivity() {
         app = application as MainApp
         i("Job activity has started.......!")
 
+        if (intent.hasExtra("job_edit")) {
+            job = intent.extras?.getParcelable("job_edit")!!
+            binding.jobTitle.setText(job.title)
+            binding.description.setText(job.description)
+        }
+
         binding.btnAdd.setOnClickListener() {
             job.title = binding.jobTitle.text.toString()
             job.description = binding.description.text.toString()
             if (job.title.isNotEmpty()) {
-                app.jobs.add(job.copy())
-                i("add Button Pressed: $job")
-                for (i in app.jobs.indices) {
-                    i("Job[$i]:${this.app.jobs[i]}")
-                }
+                //app.jobs.add(job.copy())
+                app.jobs.create(job.copy())
                 setResult(RESULT_OK)
                 finish()
             } else {
