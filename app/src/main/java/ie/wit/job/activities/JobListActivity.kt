@@ -8,10 +8,12 @@ import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import ie.wit.job.R
 import ie.wit.job.adapters.JobAdapter
+import ie.wit.job.adapters.JobListener
 import ie.wit.job.databinding.ActivityJobListBinding
 import ie.wit.job.main.MainApp
+import ie.wit.job.models.JobModel
 
-class JobListActivity : AppCompatActivity() {
+class JobListActivity : AppCompatActivity(), JobListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityJobListBinding
@@ -27,7 +29,8 @@ class JobListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = JobAdapter(app.jobs)
+        //binding.recyclerView.adapter = JobAdapter(app.jobs)
+        binding.recyclerView.adapter = JobAdapter(app.jobs.findAll(),this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -39,9 +42,16 @@ class JobListActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.item_add -> {
                 val launcherIntent = Intent(this, JobActivity::class.java)
-                startActivityForResult(launcherIntent,0)
+                startActivityForResult(launcherIntent,1)
             }
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onJobClick(job: JobModel) {
+        val launcherIntent = Intent(this, JobActivity::class.java)
+        launcherIntent.putExtra("job_edit", job)
+        startActivityForResult(launcherIntent,0)
+    }
+
 }
