@@ -1,12 +1,18 @@
 package ie.wit.job.activities
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
+import com.squareup.picasso.Picasso
 import ie.wit.job.R
 import ie.wit.job.databinding.ActivityJobBinding
+import ie.wit.job.helpers.showImagePicker
 import ie.wit.job.main.MainApp
 import ie.wit.job.models.JobModel
 import timber.log.Timber.i
@@ -17,6 +23,7 @@ class JobActivity : AppCompatActivity() {
     var job = JobModel()
     var edit = false
     lateinit var app: MainApp
+    private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +31,8 @@ class JobActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
+
+        registerImagePickerCallback()
 
         app = application as MainApp
         i("Job activity has started.......!")
@@ -34,6 +43,12 @@ class JobActivity : AppCompatActivity() {
             binding.jobTitle.setText(job.title)
             binding.description.setText(job.description)
             binding.btnAdd.setText(R.string.save_job)
+            Picasso.get()
+                .load(job.image)
+                .into(binding.jobImage)
+            if (job.image != Uri.EMPTY) {
+                binding.chooseImage.setText(R.string.change_job_image)
+            }
         }
 
         binding.btnAdd.setOnClickListener() {
@@ -52,6 +67,10 @@ class JobActivity : AppCompatActivity() {
             setResult(RESULT_OK)
             finish()
         }
+
+        binding.chooseImage.setOnClickListener {
+            showImagePicker(imageIntentLauncher)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -69,4 +88,23 @@ class JobActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun registerImagePickerCallback() {
+        imageIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                when(result.resultCode){
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Result ${result.data!!.data}")
+                            job.image = result.data!!.data!!
+                            Picasso.get()
+                                .load(job.image)
+                                .into(binding.jobImage)
+                            binding.chooseImage.setText(R.string.change_job_image)
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
+    }
 }

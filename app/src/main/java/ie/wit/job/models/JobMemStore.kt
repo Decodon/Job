@@ -27,6 +27,7 @@ class JobMemStore : JobStore {
         if (foundJob != null) {
             foundJob.title = job.title
             foundJob.description = job.description
+            foundJob.image = job.image
             logAll()
         }
     }
