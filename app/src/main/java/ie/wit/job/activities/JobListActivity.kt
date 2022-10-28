@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import ie.wit.job.R
 import ie.wit.job.adapters.JobAdapter
@@ -17,6 +19,7 @@ class JobListActivity : AppCompatActivity(), JobListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityJobListBinding
+    private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,8 @@ class JobListActivity : AppCompatActivity(), JobListener {
         binding.recyclerView.layoutManager = layoutManager
         //binding.recyclerView.adapter = JobAdapter(app.jobs)
         binding.recyclerView.adapter = JobAdapter(app.jobs.findAll(),this)
+
+        registerRefreshCallback()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -42,7 +47,7 @@ class JobListActivity : AppCompatActivity(), JobListener {
         when (item.itemId) {
             R.id.item_add -> {
                 val launcherIntent = Intent(this, JobActivity::class.java)
-                startActivityForResult(launcherIntent,1)
+                refreshIntentLauncher.launch(launcherIntent)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -51,11 +56,12 @@ class JobListActivity : AppCompatActivity(), JobListener {
     override fun onJobClick(job: JobModel) {
         val launcherIntent = Intent(this, JobActivity::class.java)
         launcherIntent.putExtra("job_edit", job)
-        startActivityForResult(launcherIntent,0)
+        refreshIntentLauncher.launch(launcherIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        binding.recyclerView.adapter?.notifyDataSetChanged()
-        super.onActivityResult(requestCode, resultCode, data)
+    private fun registerRefreshCallback() {
+        refreshIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { binding.recyclerView.adapter?.notifyDataSetChanged() }
     }
 }
