@@ -15,6 +15,7 @@ class JobActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityJobBinding
     var job = JobModel()
+    var edit = false
     lateinit var app: MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,24 +29,28 @@ class JobActivity : AppCompatActivity() {
         i("Job activity has started.......!")
 
         if (intent.hasExtra("job_edit")) {
+            edit = true
             job = intent.extras?.getParcelable("job_edit")!!
             binding.jobTitle.setText(job.title)
             binding.description.setText(job.description)
+            binding.btnAdd.setText(R.string.save_job)
         }
 
         binding.btnAdd.setOnClickListener() {
             job.title = binding.jobTitle.text.toString()
             job.description = binding.description.text.toString()
-            if (job.title.isNotEmpty()) {
-                //app.jobs.add(job.copy())
-                app.jobs.create(job.copy())
-                setResult(RESULT_OK)
-                finish()
-            } else {
-                Snackbar
-                    .make(it, "Please Enter a title", Snackbar.LENGTH_LONG)
+            if (job.title.isEmpty()) {
+                Snackbar.make(it,R.string.enter_job_title, Snackbar.LENGTH_LONG)
                     .show()
+            } else {
+                if (edit) {
+                    app.jobs.update(job.copy())
+                } else {
+                    app.jobs.create(job.copy())
+                }
             }
+            setResult(RESULT_OK)
+            finish()
         }
     }
 
