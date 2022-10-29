@@ -35,6 +35,10 @@ class JobMemStore : JobStore {
         }
     }
 
+    override fun delete(job: JobModel) {
+        jobs.remove(job)
+    }
+
     fun logAll() {
         jobs.forEach{ i("${it}") }
     }
