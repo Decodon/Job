@@ -15,6 +15,7 @@ import ie.wit.job.databinding.ActivityJobBinding
 import ie.wit.job.helpers.showImagePicker
 import ie.wit.job.main.MainApp
 import ie.wit.job.models.JobModel
+import ie.wit.job.models.Location
 import timber.log.Timber.i
 
 class JobActivity : AppCompatActivity() {
@@ -24,6 +25,9 @@ class JobActivity : AppCompatActivity() {
     var edit = false
     lateinit var app: MainApp
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
+    private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
+    //var location = Location(51.6203, -8.9055, 15f)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,7 @@ class JobActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbarAdd)
 
         registerImagePickerCallback()
+        registerMapCallback()
 
         app = application as MainApp
         i("Job activity has started.......!")
@@ -71,6 +76,19 @@ class JobActivity : AppCompatActivity() {
         binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher)
         }
+
+        binding.jobLocation.setOnClickListener {
+            val location = Location(51.6203, -8.9055, 15f)
+            if (job.zoom != 0f) {
+                location.lat =  job.lat
+                location.lng = job.lng
+                location.zoom = job.zoom
+            }
+            
+            val launcherIntent = Intent(this, MapActivity::class.java)
+                .putExtra("location", location)
+            mapIntentLauncher.launch(launcherIntent)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -101,6 +119,26 @@ class JobActivity : AppCompatActivity() {
                                 .load(job.image)
                                 .into(binding.jobImage)
                             binding.chooseImage.setText(R.string.change_job_image)
+                        } // end of if
+                    }
+                    RESULT_CANCELED -> { } else -> { }
+                }
+            }
+    }
+
+    private fun registerMapCallback() {
+        mapIntentLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult())
+            { result ->
+                when (result.resultCode) {
+                    RESULT_OK -> {
+                        if (result.data != null) {
+                            i("Got Location ${result.data.toString()}")
+                            val location = result.data!!.extras?.getParcelable<Location>("location")!!
+                            i("Location == $location")
+                            job.lat = location.lat
+                            job.lng = location.lng
+                            job.zoom = location.zoom
                         } // end of if
                     }
                     RESULT_CANCELED -> { } else -> { }
