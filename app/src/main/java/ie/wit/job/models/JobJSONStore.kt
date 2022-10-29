@@ -55,6 +55,11 @@ class JobJSONStore(private val context: Context) : JobStore {
         serialize()
     }
 
+    override fun delete(job: JobModel) {
+        jobs.remove(job)
+        serialize()
+    }
+
     private fun serialize() {
         val jsonString = gsonBuilder.toJson(jobs, listType)
         write(context, JSON_FILE, jsonString)
