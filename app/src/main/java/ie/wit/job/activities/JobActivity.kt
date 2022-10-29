@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
@@ -16,6 +17,7 @@ import ie.wit.job.helpers.showImagePicker
 import ie.wit.job.main.MainApp
 import ie.wit.job.models.JobModel
 import ie.wit.job.models.Location
+import timber.log.Timber
 import timber.log.Timber.i
 
 class JobActivity : AppCompatActivity() {
@@ -35,6 +37,7 @@ class JobActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
+
 
         registerImagePickerCallback()
         registerMapCallback()
@@ -58,7 +61,30 @@ class JobActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener() {
             job.title = binding.jobTitle.text.toString()
+
             job.description = binding.description.text.toString()
+
+            var netString = binding.paymentAmount.text.toString()
+            var net: Double = netString.toDouble()
+            job.net = net
+
+            var vatRate : Double = 0.00
+
+            if(binding.paymentMethod.checkedRadioButtonId == R.id.Zero){
+                vatRate = 0.00
+            }
+
+            else if(binding.paymentMethod.checkedRadioButtonId == R.id.Reduced){
+                vatRate = 0.135
+            }
+            else {
+                vatRate = 0.23
+            }
+
+            job.vat = vatRate * net
+
+            job.gross = job.net + job.vat
+
             if (job.title.isEmpty()) {
                 Snackbar.make(it,R.string.enter_job_title, Snackbar.LENGTH_LONG)
                     .show()
@@ -89,6 +115,7 @@ class JobActivity : AppCompatActivity() {
                 .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -151,3 +178,5 @@ class JobActivity : AppCompatActivity() {
             }
     }
 }
+
+
