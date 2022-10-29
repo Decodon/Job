@@ -28,6 +28,9 @@ class JobMemStore : JobStore {
             foundJob.title = job.title
             foundJob.description = job.description
             foundJob.image = job.image
+            foundJob.lat = job.lat
+            foundJob.lng = job.lng
+            foundJob.zoom = job.zoom
             logAll()
         }
     }
