@@ -42,7 +42,17 @@ class JobJSONStore(private val context: Context) : JobStore {
 
 
     override fun update(job: JobModel) {
-        // todo
+        val jobsList = findAll() as ArrayList<JobModel>
+        var foundJob: JobModel? = jobsList.find { p -> p.id == job.id }
+        if (foundJob != null) {
+            foundJob.title = job.title
+            foundJob.description = job.description
+            foundJob.image = job.image
+            foundJob.lat = job.lat
+            foundJob.lng = job.lng
+            foundJob.zoom = job.zoom
+        }
+        serialize()
     }
 
     private fun serialize() {
