@@ -14,6 +14,7 @@ import ie.wit.job.adapters.JobListener
 import ie.wit.job.databinding.ActivityJobListBinding
 import ie.wit.job.main.MainApp
 import ie.wit.job.models.JobModel
+import kotlinx.coroutines.Job
 
 class JobListActivity : AppCompatActivity(), JobListener {
 
@@ -33,7 +34,8 @@ class JobListActivity : AppCompatActivity(), JobListener {
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
         //binding.recyclerView.adapter = JobAdapter(app.jobs)
-        binding.recyclerView.adapter = JobAdapter(app.jobs.findAll(),this)
+        //binding.recyclerView.adapter = JobAdapter(app.jobs.findAll(),this)
+        loadJobs()
 
         registerRefreshCallback()
     }
@@ -62,6 +64,15 @@ class JobListActivity : AppCompatActivity(), JobListener {
     private fun registerRefreshCallback() {
         refreshIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult())
-            { binding.recyclerView.adapter?.notifyDataSetChanged() }
+            { loadJobs() }
+    }
+
+    private fun loadJobs(){
+        showJobs(app.jobs.findAll())
+    }
+
+    fun showJobs(jobs: List<JobModel>){
+        binding.recyclerView.adapter = JobAdapter(jobs, this)
+        binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 }
