@@ -1,5 +1,6 @@
 package ie.wit.job.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -13,27 +14,33 @@ import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import ie.wit.job.R
 import ie.wit.job.databinding.ActivityJobBinding
+import ie.wit.job.databinding.ActivityJobListBinding
 import ie.wit.job.helpers.showImagePicker
 import ie.wit.job.main.MainApp
 import ie.wit.job.models.JobModel
 import ie.wit.job.models.Location
 import timber.log.Timber
 import timber.log.Timber.i
+import kotlin.math.round
 
 class JobActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityJobBinding
+    private lateinit var bindingTwo: ActivityJobListBinding
     var job = JobModel()
     var edit = false
+    var totalIncome = 0.0
     lateinit var app: MainApp
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     //var location = Location(51.6203, -8.9055, 15f)
 
 
+    @SuppressLint("StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJobBinding.inflate(layoutInflater)
+        bindingTwo = ActivityJobListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
@@ -50,6 +57,8 @@ class JobActivity : AppCompatActivity() {
             job = intent.extras?.getParcelable("job_edit")!!
             binding.jobTitle.setText(job.title)
             binding.description.setText(job.description)
+            var netString = (job.net).toString()
+            binding.paymentAmount.setText(netString)
             binding.btnAdd.setText(R.string.save_job)
             Picasso.get()
                 .load(job.image)
@@ -81,9 +90,15 @@ class JobActivity : AppCompatActivity() {
                 vatRate = 0.23
             }
 
-            job.vat = vatRate * net
+            job.vat = (vatRate * net).round(2)
 
-            job.gross = job.net + job.vat
+            job.gross = (job.net + job.vat).round(2)
+
+            val grossIncome : Double = job.gross
+
+           totalIncome += grossIncome
+           bindingTwo.totalSoFar.text = getString(R.string.totalSoFar,totalIncome)
+            i("Total Income so far $totalIncome")
 
             if (job.title.isEmpty()) {
                 Snackbar.make(it,R.string.enter_job_title, Snackbar.LENGTH_LONG)
@@ -176,6 +191,19 @@ class JobActivity : AppCompatActivity() {
                     RESULT_CANCELED -> { } else -> { }
                 }
             }
+    }
+
+
+    private fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return round(this * multiplier) / multiplier
+    }
+
+    override fun onResume() {
+        super.onResume()
+        totalIncome = app.jobs.findAll().sumOf { it.gross }
+        bindingTwo.totalSoFar.text = getString(R.string.totalSoFar,totalIncome)
     }
 }
 
