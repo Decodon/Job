@@ -1,40 +1,50 @@
 package ie.wit.job.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import ie.wit.job.R
 import ie.wit.job.databinding.ActivityJobBinding
+import ie.wit.job.databinding.ActivityJobListBinding
 import ie.wit.job.helpers.showImagePicker
 import ie.wit.job.main.MainApp
 import ie.wit.job.models.JobModel
 import ie.wit.job.models.Location
+import timber.log.Timber
 import timber.log.Timber.i
+import kotlin.math.round
 
 class JobActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityJobBinding
+    private lateinit var bindingTwo: ActivityJobListBinding
     var job = JobModel()
     var edit = false
+    var totalIncome = 0.0
     lateinit var app: MainApp
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     //var location = Location(51.6203, -8.9055, 15f)
 
 
+    @SuppressLint("StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityJobBinding.inflate(layoutInflater)
+        bindingTwo = ActivityJobListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbarAdd.title = title
         setSupportActionBar(binding.toolbarAdd)
+
 
         registerImagePickerCallback()
         registerMapCallback()
@@ -47,6 +57,8 @@ class JobActivity : AppCompatActivity() {
             job = intent.extras?.getParcelable("job_edit")!!
             binding.jobTitle.setText(job.title)
             binding.description.setText(job.description)
+            var netString = (job.net).toString()
+            binding.paymentAmount.setText(netString)
             binding.btnAdd.setText(R.string.save_job)
             Picasso.get()
                 .load(job.image)
@@ -58,7 +70,36 @@ class JobActivity : AppCompatActivity() {
 
         binding.btnAdd.setOnClickListener() {
             job.title = binding.jobTitle.text.toString()
+
             job.description = binding.description.text.toString()
+
+            var netString = binding.paymentAmount.text.toString()
+            var net: Double = netString.toDouble()
+            job.net = net
+
+            var vatRate : Double = 0.00
+
+            if(binding.paymentMethod.checkedRadioButtonId == R.id.Zero){
+                vatRate = 0.00
+            }
+
+            else if(binding.paymentMethod.checkedRadioButtonId == R.id.Reduced){
+                vatRate = 0.135
+            }
+            else {
+                vatRate = 0.23
+            }
+
+            job.vat = (vatRate * net).round(2)
+
+            job.gross = (job.net + job.vat).round(2)
+
+            val grossIncome : Double = job.gross
+
+           totalIncome += grossIncome
+           bindingTwo.totalSoFar.text = getString(R.string.totalSoFar,totalIncome)
+            i("Total Income so far $totalIncome")
+
             if (job.title.isEmpty()) {
                 Snackbar.make(it,R.string.enter_job_title, Snackbar.LENGTH_LONG)
                     .show()
@@ -89,6 +130,7 @@ class JobActivity : AppCompatActivity() {
                 .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -150,4 +192,19 @@ class JobActivity : AppCompatActivity() {
                 }
             }
     }
+
+
+    private fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return round(this * multiplier) / multiplier
+    }
+
+    override fun onResume() {
+        super.onResume()
+        totalIncome = app.jobs.findAll().sumOf { it.gross }
+        bindingTwo.totalSoFar.text = getString(R.string.totalSoFar,totalIncome)
+    }
 }
+
+

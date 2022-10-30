@@ -52,7 +52,7 @@
                     android:maxLines="1"
                     android:padding="8dp"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="14sp" />
+                    android:textSize="20sp" />
 
                 <EditText
                     android:id="@+id/description"
@@ -67,17 +67,73 @@
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="14sp" />
 
+                <RadioGroup
+                    android:id="@+id/paymentMethod"
+                    android:layout_width="145dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.042"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/donateTitle"
+                    app:layout_constraintVertical_bias="0.276">
+
+                    <RadioButton
+                        android:id="@+id/Zero"
+                        android:layout_width="97dp"
+                        android:layout_height="wrap_content"
+                        android:checked="true"
+                        android:text="@string/zero" />
+
+                    <RadioButton
+                        android:id="@+id/Reduced"
+                        android:layout_width="97dp"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/reduced" />
+
+                    <RadioButton
+                        android:id="@+id/Full"
+                        android:layout_width="97dp"
+                        android:layout_height="wrap_content"
+                        android:checked="false"
+                        android:text="@string/full" />
+                </RadioGroup>
+
+                <EditText
+                    android:id="@+id/paymentAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:autofillHints="Please Enter an Amount"
+                    android:ems="10"
+                    android:hint="@string/enter_amount"
+                    android:inputType="number"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.888"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.781" />
+
                 <Button
                     android:id="@+id/chooseImage"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_height="33dp"
+                    android:layout_margin="20dp"
                     android:background="@color/colorAccent"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
                     android:text="@string/button_addImage"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"/>
+                    android:textSize="14sp"/>
 
                 <ImageView
                     android:id="@+id/jobImage"
@@ -88,28 +144,28 @@
                 <Button
                     android:id="@+id/jobLocation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_height="33dp"
+                    android:layout_margin="20dp"
                     android:background="@color/colorAccent"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="8dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
                     android:stateListAnimator="@null"
                     android:text="@string/button_location"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"/>
+                    android:textSize="14sp"/>
 
                 <Button
                     android:id="@+id/btnAdd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_margin="1dp"
                     android:background="@color/colorAccent"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
                     android:stateListAnimator="@null"
                     android:text="@string/button_addJob"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
             </LinearLayout>
         </ScrollView>
 

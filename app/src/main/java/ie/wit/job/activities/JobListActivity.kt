@@ -18,6 +18,8 @@ import kotlinx.coroutines.Job
 
 class JobListActivity : AppCompatActivity(), JobListener {
 
+    var totalIncome = 0.0
+
     lateinit var app: MainApp
     private lateinit var binding: ActivityJobListBinding
     private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
@@ -75,4 +77,19 @@ class JobListActivity : AppCompatActivity(), JobListener {
         binding.recyclerView.adapter = JobAdapter(jobs, this)
         binding.recyclerView.adapter?.notifyDataSetChanged()
     }
+
+
+    override fun onResume() {
+        super.onResume()
+        totalIncome = (app.jobs.findAll().sumOf { it.gross }).round(2)
+        binding.totalSoFar.text = getString(R.string.totalSoFar,totalIncome)
+    }
+
+    private fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return kotlin.math.round(this * multiplier) / multiplier
+    }
+
+
 }

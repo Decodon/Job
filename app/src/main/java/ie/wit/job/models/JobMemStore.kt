@@ -27,6 +27,9 @@ class JobMemStore : JobStore {
         if (foundJob != null) {
             foundJob.title = job.title
             foundJob.description = job.description
+            foundJob.net = job.net
+            foundJob.vat = job.vat
+            foundJob.gross = job.gross
             foundJob.image = job.image
             foundJob.lat = job.lat
             foundJob.lng = job.lng

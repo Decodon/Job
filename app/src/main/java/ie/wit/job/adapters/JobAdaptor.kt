@@ -34,6 +34,7 @@ class JobAdapter constructor(private var jobs: List<JobModel>,
         fun bind(job: JobModel, listener: JobListener) {
             binding.jobTitle.text = job.title
             binding.description.text = job.description
+            binding.gross.text = job.gross.toString()
             Picasso.get().load(job.image).resize(200,200).into(binding.imageIcon)
             binding.root.setOnClickListener { listener.onJobClick(job) }
         }
