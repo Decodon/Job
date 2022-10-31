@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity">
-    
+
     <FrameLayout
         android:id="@+id/fl_header_image"
         android:layout_width="wrap_content"
@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -36,17 +36,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
-        android:text="LOGIN SCREEN"
+        android:text="REGISTER BELOW"
         android:textColor="#222934"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fl_header_image" />
-    
-    
+
+
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_login_email"
+        android:id="@+id/til_register_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -56,9 +56,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title" >
-        
+
         <EditText
-            android:id="@+id/et_login_email"
+            android:id="@+id/et_register_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
@@ -68,27 +68,27 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_login_password"
+        android:id="@+id/til_register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="16dp"
-        android:hint="Email Id"
+        android:hint="Password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_login_email" >
+        app:layout_constraintTop_toBottomOf="@id/til_register_email" >
 
         <EditText
-            android:id="@+id/et_login_password"
+            android:id="@+id/et_register_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             tools:text="123456" />
     </com.google.android.material.textfield.TextInputLayout>
-    
+
     <Button
-        android:id="@+id/btn_login"
+        android:id="@+id/btn_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -98,13 +98,13 @@
         android:background="@color/colorAccent"
         android:foreground="?attr/selectableItemBackground"
         android:gravity="center"
-        android:text="Login"
+        android:text="Register"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_login_password" />
+        app:layout_constraintTop_toBottomOf="@id/til_register_password" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -114,7 +114,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_login" >
+        app:layout_constraintTop_toBottomOf="@id/btn_register" >
 
         <TextView
             android:id="@+id/tv_don_t_have_account"
@@ -122,7 +122,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:padding="5dp"
-            android:text="Don\'t have an account?" />
+            android:text="Already Have an Account?" />
 
         <TextView
             android:id="@+id/tv_register"
@@ -131,7 +131,7 @@
             android:layout_marginTop="16dp"
             android:foreground="?attr/selectableItemBackground"
             android:padding="5dp"
-            android:text="Register"
+            android:text="Login!"
             android:textStyle="bold"/>
 
     </LinearLayout>
