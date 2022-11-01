@@ -51,6 +51,7 @@ class JobJSONStore(private val context: Context) : JobStore {
             foundJob.net = job.net
             foundJob.vat = job.vat
             foundJob.gross = job.gross
+            foundJob.date = job.date
             foundJob.lat = job.lat
             foundJob.lng = job.lng
             foundJob.zoom = job.zoom

@@ -154,6 +154,21 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="14sp"/>
 
+                <TextView
+                    android:id="@+id/dateView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="35dp"
+                    android:text="--/--/----"
+                    android:padding="20dp" />
+
+                <Button
+                    android:id="@+id/dateButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Change Date" />
+
                 <Button
                     android:id="@+id/btnAdd"
                     android:layout_width="match_parent"
