@@ -1,12 +1,17 @@
 package ie.wit.job.activities
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -21,6 +26,8 @@ import ie.wit.job.models.JobModel
 import ie.wit.job.models.Location
 import timber.log.Timber
 import timber.log.Timber.i
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.round
 
 class JobActivity : AppCompatActivity() {
@@ -34,6 +41,11 @@ class JobActivity : AppCompatActivity() {
     private lateinit var imageIntentLauncher : ActivityResultLauncher<Intent>
     private lateinit var mapIntentLauncher : ActivityResultLauncher<Intent>
     //var location = Location(51.6203, -8.9055, 15f)
+
+    val cal = Calendar.getInstance()
+    val year = cal.get(Calendar.YEAR)
+    val month = cal.get(Calendar.MONTH)
+    val day = cal.get(Calendar.DAY_OF_MONTH)
 
 
     @SuppressLint("StringFormatInvalid")
@@ -60,12 +72,15 @@ class JobActivity : AppCompatActivity() {
             var netString = (job.net).toString()
             binding.paymentAmount.setText(netString)
             binding.btnAdd.setText(R.string.save_job)
+            binding.dateView.setText(job.date)
             Picasso.get()
                 .load(job.image)
                 .into(binding.jobImage)
             if (job.image != Uri.EMPTY) {
                 binding.chooseImage.setText(R.string.change_job_image)
             }
+            binding.dateView.setText(job.date)
+
         }
 
         binding.btnAdd.setOnClickListener() {
@@ -73,20 +88,19 @@ class JobActivity : AppCompatActivity() {
 
             job.description = binding.description.text.toString()
 
+            job.date = binding.dateView.text.toString()
+
             var netString = binding.paymentAmount.text.toString()
             var net: Double = netString.toDouble()
             job.net = net
 
-            var vatRate : Double = 0.00
+            var vatRate: Double = 0.00
 
-            if(binding.paymentMethod.checkedRadioButtonId == R.id.Zero){
+            if (binding.paymentMethod.checkedRadioButtonId == R.id.Zero) {
                 vatRate = 0.00
-            }
-
-            else if(binding.paymentMethod.checkedRadioButtonId == R.id.Reduced){
+            } else if (binding.paymentMethod.checkedRadioButtonId == R.id.Reduced) {
                 vatRate = 0.135
-            }
-            else {
+            } else {
                 vatRate = 0.23
             }
 
@@ -94,14 +108,14 @@ class JobActivity : AppCompatActivity() {
 
             job.gross = (job.net + job.vat).round(2)
 
-            val grossIncome : Double = job.gross
+            val grossIncome: Double = job.gross
 
-           totalIncome += grossIncome
-           bindingTwo.totalSoFar.text = getString(R.string.totalSoFar,totalIncome)
+            totalIncome += grossIncome
+            bindingTwo.totalSoFar.text = getString(R.string.totalSoFar, totalIncome)
             i("Total Income so far $totalIncome")
 
             if (job.title.isEmpty()) {
-                Snackbar.make(it,R.string.enter_job_title, Snackbar.LENGTH_LONG)
+                Snackbar.make(it, R.string.enter_job_title, Snackbar.LENGTH_LONG)
                     .show()
             } else {
                 if (edit) {
@@ -114,6 +128,19 @@ class JobActivity : AppCompatActivity() {
             finish()
         }
 
+
+        binding.dateButton.setOnClickListener {
+            val datePicked = DatePickerDialog(
+                this,
+                { _, Year, Month, Day ->
+                    val Month = Month + 1
+                    binding.dateView.setText("$Day/$Month/$Year")
+                }, year, month, day
+            )
+            datePicked.show()
+        }
+
+
         binding.chooseImage.setOnClickListener {
             showImagePicker(imageIntentLauncher)
         }
@@ -121,16 +148,15 @@ class JobActivity : AppCompatActivity() {
         binding.jobLocation.setOnClickListener {
             val location = Location(51.6203, -8.9055, 15f)
             if (job.zoom != 0f) {
-                location.lat =  job.lat
+                location.lat = job.lat
                 location.lng = job.lng
                 location.zoom = job.zoom
             }
-            
+
             val launcherIntent = Intent(this, MapActivity::class.java)
                 .putExtra("location", location)
             mapIntentLauncher.launch(launcherIntent)
         }
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
