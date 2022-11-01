@@ -20,4 +20,5 @@
     <string name="enter_amount">Enter Net</string>
     <string name="totalString">Total Gross Income:</string>
     <string name="totalSoFar">€%.2f</string>
+    <string name="grossView">€%.2f</string>
 </resources>
