@@ -147,7 +147,7 @@
                     android:id="@+id/jobImage"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    app:srcCompat="@mipmap/ic_launcher" />
+                    app:srcCompat="@mipmap/ic_launcher_two_round" />
 
                 <Button
                     android:id="@+id/jobLocation"
