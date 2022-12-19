@@ -1,11 +1,19 @@
 <resources>
     <string name="app_name">Job</string>
     <string name="button_addJob">Add Job</string>
+    <string name="button_addContact">Add Contact</string>
     <string name="hint_jobTitle">Job Title</string>
     <string name="hint_jobDescription">Description</string>
     <string name="hint_jobNetValue">Enter the Net Amount</string>
+    <string name="hint_firstName">First Name</string>
+    <string name="hint_lastName">Last Name</string>
+    <string name="hint_mobileNumber">Mobile Number</string>
+    <string name="hint_email">Email Address</string>
     <string name="menu_addJob">Add</string>
+    <string name="menu_addCustomer">Add Customer</string>
+    <string name="menu_customerList">Customer List</string>
     <string name="menu_cancelJob">Cancel</string>
+    <string name="menu_cancelCustomer">Cancel</string>
     <string name="enter_job_title"> Please enter a Job Title </string>
     <string name="save_job"> Save Job</string>
     <string name="button_addImage"> Add Image </string>

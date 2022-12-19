@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_customerList"
+        android:icon="@drawable/ic_customer_list"
+        android:title="@string/menu_customerList"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/item_cancel_customer"
+        android:title="@string/menu_cancelCustomer"
+        app:showAsAction="always"/>
+</menu>

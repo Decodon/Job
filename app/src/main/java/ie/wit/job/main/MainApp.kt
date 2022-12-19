@@ -1,6 +1,7 @@
 package ie.wit.job.main
 
 import android.app.Application
+import ie.wit.job.models.CustomerModel
 import ie.wit.job.models.JobJSONStore
 import ie.wit.job.models.JobMemStore
 import ie.wit.job.models.JobStore
@@ -14,6 +15,8 @@ class MainApp : Application() {
     //val jobs = JobMemStore()
     lateinit var jobs : JobStore
 
+    val customers = ArrayList<CustomerModel>()
+
 
     override fun onCreate() {
         super.onCreate()
@@ -24,5 +27,7 @@ class MainApp : Application() {
 //        jobs.add(JobModel("Two", "About two"))
 //        jobs.add(JobModel("Three", "About three"))
 //        jobs.add(JobModel("Four", "About four"))
+//        customers.add(CustomerModel("Declan", "O'Donovan", "123456789", "dec@dec.com"))
+//        customers.add(CustomerModel("DA", "O'Donovan", "23456789", "de@dec.com"))
     }
 }
