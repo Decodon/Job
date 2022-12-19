@@ -6,8 +6,12 @@ import androidx.recyclerview.widget.RecyclerView
 import ie.wit.job.databinding.CardCustomerBinding
 import ie.wit.job.models.CustomerModel
 
+interface CustomerListener {
+    fun onCustomerClick(customer: CustomerModel)
+}
 
-class CustomerAdapter constructor(private var customers: List<CustomerModel>) :
+class CustomerAdapter constructor(private var customers: List<CustomerModel>,
+                                  private val listener: CustomerListener) :
     RecyclerView.Adapter<CustomerAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -19,7 +23,7 @@ class CustomerAdapter constructor(private var customers: List<CustomerModel>) :
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val customer = customers[holder.adapterPosition]
-        holder.bind(customer)
+        holder.bind(customer, listener)
     }
 
     override fun getItemCount(): Int = customers.size
@@ -27,10 +31,11 @@ class CustomerAdapter constructor(private var customers: List<CustomerModel>) :
     class MainHolder(private val binding : CardCustomerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(customer: CustomerModel) {
+        fun bind(customer: CustomerModel, listener: CustomerListener) {
             val fullName = customer.firstName + " " + customer.lastName
             binding.name.text = fullName
             binding.email.text = customer.email
+            binding.root.setOnClickListener { listener.onCustomerClick(customer) }
         }
     }
 }

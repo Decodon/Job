@@ -29,4 +29,7 @@
     <string name="totalString">Total Gross Income:</string>
     <string name="totalSoFar">€%.2f</string>
     <string name="grossView">€%.2f</string>
+    <string name="enter_customer_name"> Please enter a name above </string>
+    <string name="save_customer"> Save Customer </string>
+
 </resources>

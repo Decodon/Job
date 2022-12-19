@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ie.wit.job.R
 import ie.wit.job.adapters.CustomerAdapter
+import ie.wit.job.adapters.CustomerListener
 import ie.wit.job.databinding.ActivityCustomerBinding
 import ie.wit.job.databinding.ActivityCustomerListBinding
 import ie.wit.job.databinding.CardCustomerBinding
@@ -19,11 +20,11 @@ import ie.wit.job.main.MainApp
 import ie.wit.job.models.CustomerModel
 
 
-class CustomerListActivity : AppCompatActivity() {
+class CustomerListActivity : AppCompatActivity(), CustomerListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityCustomerListBinding
-    private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
+    //private lateinit var refreshIntentLauncher : ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +38,8 @@ class CustomerListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = CustomerAdapter(app.customers)
+        //binding.recyclerView.adapter = CustomerAdapter(app.customers)
+        binding.recyclerView.adapter = CustomerAdapter(app.customers.findAll(), this)
     }
 
 
@@ -54,6 +56,17 @@ class CustomerListActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCustomerClick(customer: CustomerModel) {
+        val launcherIntent = Intent(this, CustomerActivity::class.java)
+        launcherIntent.putExtra("customer_edit", customer)
+        startActivityForResult(launcherIntent,0)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        binding.recyclerView.adapter?.notifyDataSetChanged()
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }
 

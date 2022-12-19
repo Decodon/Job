@@ -1,10 +1,7 @@
 package ie.wit.job.main
 
 import android.app.Application
-import ie.wit.job.models.CustomerModel
-import ie.wit.job.models.JobJSONStore
-import ie.wit.job.models.JobMemStore
-import ie.wit.job.models.JobStore
+import ie.wit.job.models.*
 //import ie.wit.job.models.JobModel
 import timber.log.Timber
 import timber.log.Timber.i
@@ -15,8 +12,8 @@ class MainApp : Application() {
     //val jobs = JobMemStore()
     lateinit var jobs : JobStore
 
-    val customers = ArrayList<CustomerModel>()
-
+    //val customers = ArrayList<CustomerModel>()
+    val customers = CustomerMemStore()
 
     override fun onCreate() {
         super.onCreate()
